@@ -1,5 +1,6 @@
 package com.github.vasilyeu95.rest;
 
+import com.github.vasilyeu95.dto.AdminUserDto;
 import com.github.vasilyeu95.dto.UserDto;
 import com.github.vasilyeu95.model.User;
 import com.github.vasilyeu95.service.UserService;
@@ -28,12 +29,12 @@ public class AdminRestControllerV1 {
     }
 
     @GetMapping(value = "usersById/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable(name = "id") Long id) {
+    public ResponseEntity<AdminUserDto> getUserById(@PathVariable(name = "id") Long id) {
         User user = userService.findById(id);
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        UserDto result = UserDto.fromUser(user);
+        AdminUserDto result = AdminUserDto.fromUser(user);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
