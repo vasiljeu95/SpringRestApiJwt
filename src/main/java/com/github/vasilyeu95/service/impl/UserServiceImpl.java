@@ -81,4 +81,13 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
         log.info("IN delete - user with id: {} successfully deleted", id);
     }
+
+    public boolean existByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    public boolean existByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
 }

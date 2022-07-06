@@ -1,10 +1,14 @@
 package com.github.vasilyeu95.rest;
 
 import com.github.vasilyeu95.dto.AuthenticationRequestDto;
+import com.github.vasilyeu95.dto.NewUserDto;
+import com.github.vasilyeu95.mapper.UserMapper;
 import com.github.vasilyeu95.model.User;
 import com.github.vasilyeu95.security.jwt.JwtTokenProvider;
-import com.github.vasilyeu95.service.UserService;
+import com.github.vasilyeu95.service.impl.UserServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -26,18 +30,21 @@ import java.util.Map;
  * @since 05.07.2022
  */
 @RestController
-@RequestMapping(value = "/api/v1/auth/")
-public class AuthenticationRestControllerV1 {
+@RequiredArgsConstructor
+@RequestMapping(value = "/api/auth/")
+public class AuthenticationRestController {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
-    private final UserService userService;
+    private final UserServiceImpl userService;
+    private final UserMapper userMapper;
 
-    @Autowired
-    public AuthenticationRestControllerV1(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserService userService) {
-        this.authenticationManager = authenticationManager;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.userService = userService;
-    }
+//    @Autowired
+//    public AuthenticationRestController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserServiceImpl userService, UserMapper userMapper) {
+//        this.authenticationManager = authenticationManager;
+//        this.jwtTokenProvider = jwtTokenProvider;
+//        this.userService = userService;
+//        this.userMapper = userMapper;
+//    }
 
     @PostMapping("login")
     public ResponseEntity login (@RequestBody AuthenticationRequestDto authenticationRequestDto) {
@@ -61,5 +68,14 @@ public class AuthenticationRestControllerV1 {
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid username and password");
         }
+    }
+
+    @PostMapping("/registration")
+    public ResponseEntity<NewUserDto> registration (@RequestBody NewUserDto userDto) {
+        if (userService.existByUsername(userDto.getUsername()) || userService.existByEmail(userDto.getEmail())) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        userService.register(userMapper.toUser(userDto));
+        return new ResponseEntity<>(userDto, HttpStatus.CREATED);
     }
 }

@@ -1,6 +1,8 @@
 package com.github.vasilyeu95.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
@@ -14,6 +16,8 @@ import java.util.List;
 @Entity
 @Table(name = "roles")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Role extends BaseEntity {
     @Column(name = "name")
     private String name;
