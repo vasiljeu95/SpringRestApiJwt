@@ -13,7 +13,7 @@ import java.util.List;
  * @author Stepan Vasilyeu
  * @since 06.07.2022
  */
-@Mapper(componentModel = "spring")
+//@Mapper(componentModel = "spring")
 public interface UserMapper {
 
     NewUserDto toUserDTO(User user);

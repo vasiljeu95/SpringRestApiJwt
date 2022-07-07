@@ -2,12 +2,11 @@ package com.github.vasilyeu95.rest;
 
 import com.github.vasilyeu95.dto.AuthenticationRequestDto;
 import com.github.vasilyeu95.dto.NewUserDto;
-import com.github.vasilyeu95.mapper.UserMapper;
+import com.github.vasilyeu95.mapper.UserMapperImpl;
 import com.github.vasilyeu95.model.User;
 import com.github.vasilyeu95.security.jwt.JwtTokenProvider;
 import com.github.vasilyeu95.service.impl.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,7 +35,7 @@ public class AuthenticationRestController {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserServiceImpl userService;
-    private final UserMapper userMapper;
+    private final UserMapperImpl userMapper;
 
 //    @Autowired
 //    public AuthenticationRestController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserServiceImpl userService, UserMapper userMapper) {
@@ -70,8 +69,8 @@ public class AuthenticationRestController {
         }
     }
 
-    @PostMapping("/registration")
-    public ResponseEntity<NewUserDto> registration (@RequestBody NewUserDto userDto) {
+    @PostMapping("registration")
+    public ResponseEntity registration(@RequestBody NewUserDto userDto) {
         if (userService.existByUsername(userDto.getUsername()) || userService.existByEmail(userDto.getEmail())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
