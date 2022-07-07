@@ -70,7 +70,7 @@ public class AuthenticationRestController {
     }
 
     @PostMapping("registration")
-    public ResponseEntity registration(@RequestBody NewUserDto userDto) {
+    public ResponseEntity<NewUserDto> registration(@RequestBody NewUserDto userDto) {
         if (userService.existByUsername(userDto.getUsername()) || userService.existByEmail(userDto.getEmail())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

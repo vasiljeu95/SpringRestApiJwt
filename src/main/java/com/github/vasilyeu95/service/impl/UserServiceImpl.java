@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,10 +40,13 @@ public class UserServiceImpl implements UserService {
         Role roleUser = roleRepository.findByName("ROLE_USER");
         List<Role> userRoles = new ArrayList<>();
         userRoles.add(roleUser);
+        Date now = new Date();
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoleList(userRoles);
         user.setStatus(Status.ACTIVE);
+        user.setCreated(now);
+        user.setUpdated(now);
 
         User registeredUser = userRepository.save(user);
 
